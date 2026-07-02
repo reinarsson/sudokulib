@@ -59,3 +59,26 @@ The **CI** workflow (`ci.yml`) runs on every push and pull request:
 - Tests against Python 3.11 and 3.12
 - Enforces 80% coverage threshold
 - Lints with flake8
+
+## PuLP MIP model
+
+Indices: $r$ = row, $c$ = column, $v$ = digit value (all ranging over $\{1,\ldots,9\}$).
+
+Decision variable: $x_{r,c,v} \in \{0,1\}$ — equals 1 if cell $(r,c)$ contains digit $v$, otherwise 0.
+
+**1. Each cell holds exactly one digit:**
+$$\Large \sum_{v=1}^{9} x_{r,c,v} = 1 \qquad \forall\; r,c \in \{1,\ldots,9\}$$
+
+**2. Each digit appears exactly once per row:**
+$$\Large \sum_{c=1}^{9} x_{r,c,v} = 1 \qquad \forall\; r,v \in \{1,\ldots,9\}$$
+
+**3. Each digit appears exactly once per column:**
+$$\Large \sum_{r=1}^{9} x_{r,c,v} = 1 \qquad \forall\; c,v \in \{1,\ldots,9\}$$
+
+**4. Each digit appears exactly once per 3×3 box:**
+$$\Large \sum_{i=0}^{2}\sum_{j=0}^{2} x_{b_r+i,\; b_c+j,\; v} = 1 \qquad \forall\; b_r,b_c \in \{0,3,6\},\; v \in \{1,\ldots,9\}$$
+
+**5. Pre-filled clues are fixed:**
+$$\Large x_{r,c,\,g_{r,c}} = 1 \qquad \forall\; (r,c) \text{ where } g_{r,c} \neq 0$$
+
+where $g_{r,c}$ is the given digit at cell $(r,c)$.
